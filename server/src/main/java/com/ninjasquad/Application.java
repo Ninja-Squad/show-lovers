@@ -8,13 +8,20 @@ import java.util.List;
 
 public class Application {
 
+    private static WebServer webServer;
+
     public static void main(String... args) {
 
         // launch web server
+        webServer.start(8081);
+    }
+
+    public static WebServer configure() {
         User user = new User("Cedric", "cedric", "cedric", 27);
         List<User> users = Arrays.asList(user);
-        new WebServer(routes -> routes
+        webServer = new WebServer(routes -> routes
                 .get("/users", () -> new Payload(users).withAllowOrigin("*"))
-        ).start(8081);
+        );
+        return webServer;
     }
 }

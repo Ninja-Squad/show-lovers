@@ -66,7 +66,10 @@ Créer un formulaire contenant les champs :
 - `password` pour son mot de passe (longueur minimum 5 caractères)
 - `age` pour son age (minimum 12 ans, maximum 99 ans)
 
-et un bouton d'enregistrement qui appelera la méthode `register` de notre controller.
+Des messages d'avertissement doivent apparaître si les champs ne sont pas valides.
+
+Ajouter un bouton d'enregistrement qui appelera la méthode `register` de notre controller (le bouton
+  ne sera clickable que si le formulaire est valide).
 Celle-ci devra appeler le serveur avec un POST sur `/users`. En cas de succès, l'application
 devra rediriger vers la page d'accueil (utiliser `$location.path()`).
 

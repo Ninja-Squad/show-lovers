@@ -6,6 +6,10 @@ app.config(function($routeProvider){
       templateUrl: 'views/main.html',
       controller: 'MainCtrl'
     })
+    .when('/register', {
+      templateUrl: 'views/register.html',
+      controller: 'RegisterCtrl'
+    })
     .otherwise('/')
 });
 
@@ -16,4 +20,14 @@ app.controller('MainCtrl', function($scope, $http){
     .success(function(data){
       $scope.users = data;
     })
+});
+
+app.controller('RegisterCtrl', function($scope, $http){
+
+  $scope.register = function(){
+    $http.post('http://localhost:8081/users', $scope.user)
+      .success(function(data){
+
+      })
+  }
 });

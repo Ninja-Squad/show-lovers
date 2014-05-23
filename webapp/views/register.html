@@ -1,0 +1,24 @@
+<h2>New user</h2>
+<form name="registerForm" role="form">
+  <div class="form-group">
+    <label>Name</label>
+    <input id="name" name="name" type="text" class="form-control" placeholder="Enter name" ng-model="user.name" ng-required="true">
+  </div>
+  <div class="form-group">
+    <label>Login</label>
+    <input id="login" name="login" type="text" class="form-control" placeholder="Enter login" ng-model="user.login" ng-required="true" ng-maxlength="10">
+    <span ng-if="registerForm.login.$dirty && registerForm.login.$error.maxlength">Login should be 10 characters max</span>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" ng-model="user.password" ng-required="true" ng-minlength="5">
+    <span ng-if="registerForm.password.$dirty && registerForm.password.$error.minlength">Password should be 5 characters at least</span>
+  </div>
+  <div class="form-group">
+    <label>Age</label>
+    <input id="age" name="age" type="number" class="form-control" placeholder="Enter age" ng-model="user.age" ng-required="true" min="12" max="99">
+    <span ng-if="registerForm.age.$dirty && registerForm.age.$error.min">You're too young</span>
+    <span ng-if="registerForm.age.$dirty && registerForm.age.$error.max">You're too old</span>
+  </div>
+</form>
+<a class="btn btn-primary" ng-click="register()" ng-disabled="registerForm.$invalid">Register</a>
