@@ -22,12 +22,11 @@ app.controller('MainCtrl', function($scope, $http){
     })
 });
 
-app.controller('RegisterCtrl', function($scope, $http){
-
+app.controller('RegisterCtrl', function($scope, $http, $location){
   $scope.register = function(){
     $http.post('http://localhost:8081/users', $scope.user)
-      .success(function(data){
-
+      .success(function(){
+        $location.path('/')
       })
   }
 });
