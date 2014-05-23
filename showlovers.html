@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.9/angular.js"></script>
+    <script src="app.js"></script>
+  </head>
+  <body ng-app="showLovers" class="container" style="margin-top: 50px">
+    <div ng-controller="MainCtrl">
+      <h1 class="text-center" style="font-size: 95px">Show Lovers</h1>
+      <br/>
+      <div class="row text-center">
+        <a class="btn btn-primary">Register</a>
+        <br/>
+        <br/>
+        <div ng-repeat="user in users">
+          {{ user.name }}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
