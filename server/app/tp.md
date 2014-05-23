@@ -33,6 +33,17 @@ Nous utiliserons le module de route d'AngularJS, à inclure dans vos librairies
 également et dans la déclaration de votre application.
 
 
+# Static server
+
+Nous allons avoir besoin de servir notre webapp depuis un petit serveur. Pour cela, installer
+
+    npm install http-server -g
+
+Puis dans le répertoire de votre application, lancer :
+
+    http-server
+
+
 # Routes
 
 Ajouter une `div` avec la directive `ngView` dans le `body`.
@@ -40,8 +51,8 @@ Placer le contenu actuel dans un template nommé `main.html` dans un dossier `vi
 
 Utiliser la méthode `config` sur votre application pour configurer les routes.
 L'url racine devra renvoyer vers le template `views/main.html` et le controller `MainCtrl`.
-Ajouter un bouton 'Register', renvoyant vers l'url '/#register' et un bouton 'Login' renvoyant
-vers l'url '/#login'.
+Ajouter un bouton 'Register', renvoyant vers l'url '#register' et un bouton 'Login' renvoyant
+vers l'url '#login'.
 
 # Inscription
 
