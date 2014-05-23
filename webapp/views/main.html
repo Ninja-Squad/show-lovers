@@ -1,11 +1,14 @@
 <h1 class="text-center" style="font-size: 95px">Show Lovers</h1>
 <br/>
-<div class="row text-center">
+<div class="row text-center" ng-hide="isLogged">
   <a class="btn btn-primary" href="#register">Register</a>
   <a class="btn btn-primary" href="#login">Login</a>
-  <br/>
-  <br/>
-  <div ng-repeat="user in users">
-    {{ user.name }}
-  </div>
+</div>
+<div class="row text-center" ng-show="isLogged">
+  <a class="btn btn-success" href="#top">Top</a>
+</div>
+<br/>
+<br/>
+<div ng-repeat="user in users">
+  {{ user.name }}
 </div>

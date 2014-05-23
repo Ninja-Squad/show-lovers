@@ -33,6 +33,16 @@ public class Application {
                         return new Payload(createUser(user)).withAllowOrigin("*").withAllowHeaders("Content-Type");
                     }
                 })
+                .options("/login", () -> new Payload("").withAllowMethods("POST").withAllowOrigin("*").withAllowHeaders("Content-Type"))
+                .post("/login", context -> {
+                    Credentials credentials = context.contentAs(Credentials.class);
+                    String id = id(credentials.getLogin());
+                    if (users.get(id) == null || !users.get(id).getPassword().equals(credentials.getPassword())) {
+                        return Payload.badRequest();
+                    } else {
+                        return new Payload(id).withAllowOrigin("*").withAllowHeaders("Content-Type");
+                    }
+                })
         );
         return webServer;
     }

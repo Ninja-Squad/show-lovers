@@ -29,8 +29,9 @@ mettre le résultat dans la variable `users` du `$scope`.
 
 # Modules
 
-Nous utiliserons le module de route d'AngularJS, à inclure dans vos librairies
+Nous utiliserons le module de route d'AngularJS, `ngRoute` à inclure dans vos librairies
 également et dans la déclaration de votre application.
+De même avec le module `ngCookies`.
 
 
 # Static server
@@ -91,7 +92,17 @@ Pour cela, utiliser le service `$cookieStore` dans votre controller.
 Afin d'envoyer ce token au serveur pour les requêtes suivantes (et ainsi montrer que vous êtes bien authentifiés)
 indiquer au service http ce token :
 
-    $http.defaults.headers.common['token'] = token;
+    $http.defaults.headers.common['token'] = data;
+
+Pour éviter de se logger à chaque rechargement de l'application, indiquer à Angular de
+remettre ce header à chaque démarrage avec :
+
+    app.run(function($http, $cookieStore){
+      $http.defaults.headers.common['token'] = $cookieStore.get('login');
+    });
+
+
+# Page d'accueil
 
 Dans le controller `MainCtrl`, ajouter un attribut `isLogged` permettant de vérifier si
 l'utilisateur est loggé ou non. Par souci de simplicité cette méthode ne fera que vérifier si un cookie nommé `login` est présent.
