@@ -18,6 +18,10 @@ app.config(function($routeProvider){
       templateUrl: 'views/top.html',
       controller: 'TopCtrl'
     })
+    .when('/shows/:id', {
+      templateUrl: 'views/show.html',
+      controller: 'ShowCtrl'
+    })
     .otherwise('/');
 });
 
@@ -70,6 +74,18 @@ app.controller('TopCtrl', function($scope, $http, $log){
     })
     .error(function(){
       $log.error('error while fetching shows');
+    });
+
+});
+
+app.controller('ShowCtrl', function($scope, $http, $log, $routeParams){
+
+  $http.get('http://localhost:8081/shows/' + $routeParams.id)
+    .success(function(data){
+      $scope.show = data;
+    })
+    .error(function(){
+      $log.error('error while fetching show ' + $routeParams.id);
     });
 
 });

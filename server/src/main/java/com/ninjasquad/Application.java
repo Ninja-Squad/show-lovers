@@ -4,6 +4,7 @@ import net.codestory.http.WebServer;
 import net.codestory.http.payload.Payload;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
 
@@ -22,7 +23,7 @@ public class Application {
 
     public static WebServer configure() {
         users.put(id("cedric"), new User("Cedric", "cedric", "cedric", 27));
-        shows.put("got", new Show(1, "Game of Thrones"));
+        shows.put("1", new Show(1, "Game of Thrones", "http://ia.media-imdb.com/images/M/MV5BMTk0NDg4NjQ5N15BMl5BanBnXkFtZTgwMzkzNTgyMTE@._V1_SX214_AL_.jpg"));
 
         webServer = new WebServer(routes -> routes
                 .options("/users", () -> new Payload("").withAllowMethods("GET", "POST").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
@@ -48,12 +49,22 @@ public class Application {
                 })
                 .options("/shows", () -> new Payload("").withAllowMethods("GET").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
                 .get("/shows", () -> new Payload(shows()).withAllowOrigin("*").withAllowHeaders("token"))
+                .options("/shows/:id", (context, id) -> new Payload("").withAllowMethods("GET").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
+                .get("/shows/:id", (context, id) -> new Payload(show(id)).withAllowOrigin("*").withAllowHeaders("token"))
         );
         return webServer;
     }
 
-    private static List<Show> shows() {
-        return new ArrayList<>(shows.values());
+    private static Show show(String id) {
+        return shows.get(id);
+    }
+
+    private static List<LightShow> shows() {
+        return shows.values().stream().map(Application::toLightShow).collect(Collectors.toList());
+    }
+
+    private static LightShow toLightShow(Show show) {
+        return new LightShow(show.getId(), show.getName(), show.getScore());
     }
 
     private static String id(String login) {
