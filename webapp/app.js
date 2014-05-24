@@ -14,6 +14,10 @@ app.config(function($routeProvider){
       templateUrl: 'views/login.html',
       controller: 'LoginCtrl'
     })
+    .when('/top', {
+      templateUrl: 'views/top.html',
+      controller: 'TopCtrl'
+    })
     .otherwise('/');
 });
 
@@ -56,4 +60,16 @@ app.controller('LoginCtrl', function($scope, $http, $location, $log, $cookieStor
         $log.error('bad login');
       });
   }
+});
+
+app.controller('TopCtrl', function($scope, $http, $log){
+
+  $http.get('http://localhost:8081/shows')
+    .success(function(data){
+      $scope.shows = data;
+    })
+    .error(function(){
+      $log.error('error while fetching shows');
+    });
+
 });
