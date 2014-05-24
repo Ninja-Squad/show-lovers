@@ -19,7 +19,7 @@ run git clone https://github.com/CodeStory/fluent-http.git
 run cd fluent-http && mvn clean install -DskipTests
 
 # Add sources
-add ./ ./server
+add ./server ./server
 workdir ./server
 
 # Build project
