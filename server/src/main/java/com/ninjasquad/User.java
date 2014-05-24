@@ -2,16 +2,21 @@ package com.ninjasquad;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
 
     private String name;
 
     private String login;
 
-    @JsonIgnore
     private String password;
 
     private int age;
+
+    @JsonIgnore
+    private Set<String> shows = new HashSet<>();
 
     public User() {
     }
@@ -53,5 +58,28 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Set<String> getShows() {
+        return shows;
+    }
+
+    public synchronized void addShow(String id) {
+        shows.add(id);
+    }
+
+    public synchronized void removeShow(String id) {
+        shows.remove(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", shows=" + shows +
+                '}';
     }
 }

@@ -2,4 +2,6 @@
   <h2>{{ show.name }}</h2>
   <img ng-src="{{show.image}}">
   <h3>{{ show.score }} love this show!</h3>
+  <a class="btn btn-primary" ng-hide="show.userAlreadyVoted" ng-click="vote()">I love this show</a>
+  <a class="btn btn-danger" ng-show="show.userAlreadyVoted" ng-click="downvote()">I don't like this show anymore</a>
 </div>

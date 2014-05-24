@@ -23,6 +23,14 @@ public class Show {
         this.image = image;
     }
 
+    public Show(int id, String name, String image, boolean userAlreadyVoted, AtomicInteger score) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.userAlreadyVoted = userAlreadyVoted;
+        this.score = score;
+    }
+
     public int getId() {
         return id;
     }

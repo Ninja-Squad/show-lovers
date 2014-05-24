@@ -15,12 +15,12 @@ public class UsersTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        webServer.start(4242);
+        webServer.start(4243);
     }
 
     @Test
     public void get() {
-        RestAssured.get("http://localhost:4242/users")
+        RestAssured.get("http://localhost:4243/users")
                 .then().assertThat()
                 .body("[0].name", equalTo("Cedric"));
     }
@@ -29,15 +29,22 @@ public class UsersTest {
     public void post() {
         given().contentType("application/json")
                 .body(new User("JB", "jb", "jb", 38))
-                .post("http://localhost:4242/users")
+                .post("http://localhost:4243/users")
                 .then().assertThat()
                 .body(equalTo(String.valueOf("jb".hashCode())));
 
         given().contentType("application/json")
                 .body(new User("JB", "jb", "jb", 38))
-                .post("http://localhost:4242/users")
+                .post("http://localhost:4243/users")
                 .then().assertThat()
                 .statusCode(400);
+
+        // we can log in after
+        given().contentType("application/json")
+                .body(new Credentials("jb", "jb"))
+                .post("http://localhost:4243/login")
+                .then().assertThat()
+                .statusCode(200);
     }
 
     @AfterClass
