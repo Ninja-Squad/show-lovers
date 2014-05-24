@@ -122,6 +122,8 @@ la liste des séries et leurs notes.
 Afficher cette liste dans le template, ordonnée par leur note.
 Chaque série est clickable et renvoie vers une url `/shows/id_du_show`.
 
+Ajouter un filtre qui permet de rechercher un show par son nom.
+
 # Détail d'une série
 
 Créer une route pour les urls dynamiques `/shows/id_du_show`, ainsi qu'un controller
