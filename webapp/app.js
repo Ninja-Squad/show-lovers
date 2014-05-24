@@ -34,7 +34,7 @@ app.controller('MainCtrl', function($scope, $http, $cookieStore){
 
   $scope.isLogged = angular.isDefined($cookieStore.get('login'));
 
-  $http.get('http://localhost:8081/users')
+  $http.get('http://23.251.141.246:80/users')
     .success(function(data){
       $scope.users = data;
     })
@@ -42,7 +42,7 @@ app.controller('MainCtrl', function($scope, $http, $cookieStore){
 
 app.controller('RegisterCtrl', function($scope, $http, $location){
   $scope.register = function(){
-    $http.post('http://localhost:8081/users', $scope.user)
+    $http.post('http://23.251.141.246:80/users', $scope.user)
       .success(function(){
         $location.path('/');
       })
@@ -54,7 +54,7 @@ app.controller('RegisterCtrl', function($scope, $http, $location){
 
 app.controller('LoginCtrl', function($scope, $http, $location, $log, $cookieStore){
   $scope.login = function(){
-    $http.post('http://localhost:8081/login', $scope.credentials)
+    $http.post('http://23.251.141.246:80/login', $scope.credentials)
       .success(function(data){
         $cookieStore.put('login', data);
         $http.defaults.headers.common['token'] = data;
@@ -68,7 +68,7 @@ app.controller('LoginCtrl', function($scope, $http, $location, $log, $cookieStor
 
 app.controller('TopCtrl', function($scope, $http, $log){
 
-  $http.get('http://localhost:8081/shows')
+  $http.get('http://23.251.141.246:80/shows')
     .success(function(data){
       $scope.shows = data;
     })
@@ -80,7 +80,7 @@ app.controller('TopCtrl', function($scope, $http, $log){
 
 app.controller('ShowCtrl', function($scope, $http, $log, $routeParams){
 
-  $http.get('http://localhost:8081/shows/' + $routeParams.id)
+  $http.get('http://23.251.141.246:80/shows/' + $routeParams.id)
     .success(function(data){
       $scope.show = data;
     })
@@ -89,7 +89,7 @@ app.controller('ShowCtrl', function($scope, $http, $log, $routeParams){
     });
 
     $scope.vote = function(){
-      $http.put('http://localhost:8081/shows/' + $routeParams.id)
+      $http.put('http://23.251.141.246:80/shows/' + $routeParams.id)
         .success(function(data){
           $scope.show = data;
         })
@@ -99,7 +99,7 @@ app.controller('ShowCtrl', function($scope, $http, $log, $routeParams){
     }
 
     $scope.downvote = function(){
-      $http.delete('http://localhost:8081/shows/' + $routeParams.id)
+      $http.delete('http://23.251.141.246:80/shows/' + $routeParams.id)
         .success(function(data){
           $scope.show = data;
         })
