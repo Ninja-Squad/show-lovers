@@ -21,9 +21,9 @@ public class ShowsTest {
     public void shows() {
         RestAssured.get("http://localhost:4244/shows")
                 .then().assertThat()
-                .body("[0].name", equalTo("Game of Thrones"))
+                .body("[0].name", equalTo("Mad Men"))
                 .body("[0].score", equalTo(0))
-                .body("[0].id", equalTo(1));
+                .body("[0].id", equalTo(11));
     }
 
     @Test

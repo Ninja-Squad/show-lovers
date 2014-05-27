@@ -25,6 +25,77 @@ public class Application {
     }
 
     public static WebServer configure() {
+        init();
+
+        webServer = new WebServer(routes -> routes
+                .options("/users", () -> new Payload("").withAllowMethods("GET", "POST").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
+                .get("/users", () -> new Payload(users()).withAllowOrigin("*").withAllowHeaders("token"))
+                .post("/users", context -> {
+                    User user = context.contentAs(User.class);
+                    System.out.println("user = " + user);
+                    String id = id(user.getLogin());
+                    if (users.get(id) != null) {
+                        return Payload.badRequest().withAllowOrigin("*").withAllowHeaders("token");
+                    } else {
+                        return new Payload(createUser(user)).withAllowOrigin("*").withAllowHeaders("Content-Type", "token");
+                    }
+                })
+                .options("/login", () -> new Payload("").withAllowMethods("POST").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
+                .post("/login", context -> {
+                    Credentials credentials = context.contentAs(Credentials.class);
+                    System.out.println("credentials = " + credentials);
+                    String id = id(credentials.getLogin());
+                    if (users.get(id) == null || !users.get(id).getPassword().equals(credentials.getPassword())) {
+                        return Payload.badRequest().withAllowOrigin("*").withAllowHeaders("token");
+                    } else {
+                        return new Payload(id).withAllowOrigin("*").withAllowHeaders("Content-Type");
+                    }
+                })
+                .options("/shows", () -> new Payload("").withAllowMethods("GET").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
+                .get("/shows", () -> new Payload(shows()).withAllowOrigin("*").withAllowHeaders("token"))
+                .options("/shows/:id", (context, id) -> new Payload("").withAllowMethods("GET", "PUT", "DELETE").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
+                .get("/shows/:id", (context, id) -> {
+                    String token = context.header("token");
+                    System.out.println("user " + token + " wants the show " + id);
+                    if (shows.get(id) == null) {
+                        return Payload.notFound().withAllowOrigin("*").withAllowHeaders("token");
+                    } else if (token == null || users.get(token) == null) {
+                        return new Payload(show(id, null)).withAllowOrigin("*").withAllowHeaders("token");
+                    } else {
+                        return new Payload(show(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
+                    }
+                })
+                .put("/shows/:id", (context, id) -> {
+                    String token = context.header("token");
+                    System.out.println("user " + token + " votes for the show " + id);
+                    if (shows.get(id) == null) {
+                        return Payload.notFound().withAllowOrigin("*").withAllowHeaders("token");
+                    } else if (token == null || users.get(token) == null) {
+                        return Payload.forbidden().withAllowOrigin("*").withAllowHeaders("token");
+                    } else if (users.get(token).getShows().contains(id)) {
+                        return Payload.methodNotAllowed().withAllowOrigin("*").withAllowHeaders("token");
+                    } else {
+                        return new Payload(voteFor(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
+                    }
+                })
+                .delete("/shows/:id", (context, id) -> {
+                    String token = context.header("token");
+                    System.out.println("user " + token + " downvotes for the show " + id);
+                    if (shows.get(id) == null) {
+                        return Payload.notFound().withAllowOrigin("*").withAllowHeaders("token");
+                    } else if (token == null || users.get(token) == null) {
+                        return Payload.forbidden().withAllowOrigin("*").withAllowHeaders("token");
+                    } else if (!users.get(token).getShows().contains(id)) {
+                        return Payload.methodNotAllowed().withAllowOrigin("*").withAllowHeaders("token");
+                    } else {
+                        return new Payload(downvoteFor(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
+                    }
+                })
+        );
+        return webServer;
+    }
+
+    private static void init() {
         User cedric = new User("Cedric", "cedric", "cedric", 27);
         users.put(id("cedric"), cedric);
         shows.put("1", new Show(1, "Game of Thrones", "http://ia.media-imdb.com/images/M/MV5BMTk0NDg4NjQ5N15BMl5BanBnXkFtZTgwMzkzNTgyMTE@._V1_SX214_AL_.jpg"));
@@ -40,73 +111,6 @@ public class Application {
         shows.put("11", new Show(11, "Mad Men", "http://ia.media-imdb.com/images/M/MV5BMTg1MTIwODYwMl5BMl5BanBnXkFtZTgwNjAwNzQzMTE@._V1_SY317_CR2,0,214,317_AL_.jpg"));
         voteFor("3", cedric);
         voteFor("4", cedric);
-
-        webServer = new WebServer(routes -> routes
-                .options("/users", () -> new Payload("").withAllowMethods("GET", "POST").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
-                .get("/users", () -> new Payload(users()).withAllowOrigin("*").withAllowHeaders("token"))
-                .post("/users", context -> {
-                    User user = context.contentAs(User.class);
-                    System.out.println("user = " + user);
-                    String id = id(user.getLogin());
-                    if (users.get(id) != null) {
-                        return Payload.badRequest();
-                    } else {
-                        return new Payload(createUser(user)).withAllowOrigin("*").withAllowHeaders("Content-Type", "token");
-                    }
-                })
-                .options("/login", () -> new Payload("").withAllowMethods("POST").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
-                .post("/login", context -> {
-                    Credentials credentials = context.contentAs(Credentials.class);
-                    System.out.println("credentials = " + credentials);
-                    String id = id(credentials.getLogin());
-                    if (users.get(id) == null || !users.get(id).getPassword().equals(credentials.getPassword())) {
-                        return Payload.badRequest();
-                    } else {
-                        return new Payload(id).withAllowOrigin("*").withAllowHeaders("Content-Type");
-                    }
-                })
-                .options("/shows", () -> new Payload("").withAllowMethods("GET").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
-                .get("/shows", () -> new Payload(shows()).withAllowOrigin("*").withAllowHeaders("token"))
-                .options("/shows/:id", (context, id) -> new Payload("").withAllowMethods("GET", "PUT", "DELETE").withAllowOrigin("*").withAllowHeaders("Content-Type", "token"))
-                .get("/shows/:id", (context, id) -> {
-                    String token = context.header("token");
-                    System.out.println("user " + token + " wants the show " + id);
-                    if (shows.get(id) == null) {
-                        return Payload.notFound();
-                    } else if (token == null || users.get(token) == null) {
-                        return new Payload(show(id, null)).withAllowOrigin("*").withAllowHeaders("token");
-                    } else {
-                        return new Payload(show(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
-                    }
-                })
-                .put("/shows/:id", (context, id) -> {
-                    String token = context.header("token");
-                    System.out.println("user " + token + " votes for the show " + id);
-                    if (shows.get(id) == null) {
-                        return Payload.notFound();
-                    } else if (token == null || users.get(token) == null) {
-                        return Payload.forbidden();
-                    } else if (users.get(token).getShows().contains(id)) {
-                        return Payload.methodNotAllowed();
-                    } else {
-                        return new Payload(voteFor(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
-                    }
-                })
-                .delete("/shows/:id", (context, id) -> {
-                    String token = context.header("token");
-                    System.out.println("user " + token + " downvotes for the show " + id);
-                    if (shows.get(id) == null) {
-                        return Payload.notFound();
-                    } else if (token == null || users.get(token) == null) {
-                        return Payload.forbidden();
-                    } else if (!users.get(token).getShows().contains(id)) {
-                        return Payload.methodNotAllowed();
-                    } else {
-                        return new Payload(downvoteFor(id, users.get(token))).withAllowOrigin("*").withAllowHeaders("token");
-                    }
-                })
-        );
-        return webServer;
     }
 
     private static Show voteFor(String id, User user) {
