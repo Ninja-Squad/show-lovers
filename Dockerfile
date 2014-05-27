@@ -12,11 +12,7 @@ run echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true 
 run apt-get install -y --force-yes oracle-java8-installer
 
 # Install tools
-run apt-get install -y maven git
-
-# Build fluent-http
-run git clone https://github.com/CodeStory/fluent-http.git
-run cd fluent-http && mvn clean install -DskipTests
+run apt-get install -y maven
 
 # Add sources
 add ./server ./server
