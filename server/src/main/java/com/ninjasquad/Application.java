@@ -21,7 +21,7 @@ public class Application {
 
         // launch web server
         configure();
-        webServer.start(8081);
+        webServer.start(80);
     }
 
     public static WebServer configure() {

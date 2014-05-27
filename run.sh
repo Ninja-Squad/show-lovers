@@ -4,11 +4,11 @@ sudo docker kill $(cat docker.pid)
 
 # Build new image
 echo "build image"
-docker sudo build -t ninjasquad/tp-ng .
+sudo docker build -t ninjasquad/tp-ng .
 
 # Run image
 echo "run image"
-DOCKER_CONTAINER=$(sudo docker run -p 8081:80 -d ninjasquad/tp-ng)
+DOCKER_CONTAINER=$(sudo docker run -p 80:80 -d ninjasquad/tp-ng)
 
 # Save container id
 rm docker.pid

@@ -26,7 +26,7 @@ workdir ./server
 run mvn clean compile -DskipTests
 
 # Expose the http port
-expose 8081
+expose 80
 
 # Launch server on start
 cmd mvn exec:java
