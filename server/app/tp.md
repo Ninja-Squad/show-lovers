@@ -26,6 +26,11 @@ Nous allons maintenant récupérer la liste des utilisateurs sur le serveur.
 Pour cela, utiliser le service `$http` et faire un GET sur l'url `/users` et
 mettre le résultat dans la variable `users` du `$scope`.
 
+    $http.get('http://..../users')
+        .success(function(data){
+            $scope.users = data;
+        });
+
 
 # Modules
 
@@ -33,27 +38,27 @@ Nous utiliserons le module de route d'AngularJS, `ngRoute` à inclure dans vos l
 également et dans la déclaration de votre application.
 De même avec le module `ngCookies`.
 
-
-# Static server
-
-Nous allons avoir besoin de servir notre webapp depuis un petit serveur. Pour cela, installer
-
-    npm install http-server -g
-
-Puis dans le répertoire de votre application, lancer :
-
-    http-server
+    var app = angular.module('app', ['ngRoute', 'ngCookies']);
 
 
 # Routes
 
 Ajouter une `div` avec la directive `ngView` dans le `body`.
 Placer le contenu actuel dans un template nommé `main.html` dans un dossier `views`.
+Ajouter un lien 'Register', renvoyant vers l'url '#register' et un lien 'Login' renvoyant
+vers l'url '#login'.
 
 Utiliser la méthode `config` sur votre application pour configurer les routes.
 L'url racine devra renvoyer vers le template `views/main.html` et le controller `MainCtrl`.
-Ajouter un bouton 'Register', renvoyant vers l'url '#register' et un bouton 'Login' renvoyant
-vers l'url '#login'.
+
+    app.config(function($routeProvider){
+      $routeProvider
+        .when('/', {
+          templateUrl: 'views/main.html',
+          controller: 'MainCtrl'
+        })
+        .otherwise('/');
+    });
 
 # Inscription
 
